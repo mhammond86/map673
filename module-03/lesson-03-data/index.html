@@ -125,7 +125,7 @@
 </head>
 
 <body>
-    <h1>US Unemployment Rates from 2001-2013b</h1>
+    <h1>US Unemployment Rates from 2001-2013.</h1>
     
     <div id="ui-controls">
         <label><span class="min">2001</span><span class="max">2013</span>
@@ -204,7 +204,7 @@
                         color: 'white',
                         weight: 2,
                         fillOpacity: 1,
-                        fillColor: 'getColor'
+                        fillColor: 'grey'
                     }
                 }
             }).addTo(map)
@@ -228,19 +228,16 @@
             layer.setStyle({
                 fillColor: getColor(Number(props[attribute]), breaks)
             });
-                console.log(layer.feature.properties);
-                        //create popup with each county data attribute and name
-                    layer.bindPopup("<b>" +layer.feature.properties['State_Name'] + " </b></br>" +
+                
+                layer.bindPopup("<b>" +layer.feature.properties['State_Name'] + " </b></br>" +
                     attribute + ":  " +
                     ((props[attribute])).toLocaleString()+"%")
                 
-        layer.on('mouseover', function() {
+                layer.on('mouseover', function() {
                     updateInfo(this);
                     
-                        //set outline of county to yellow when moused over
                     layer.setStyle({color: '#FFFF00'}).bringToFront(); 
                 });
- // call updateInfo function and add even listener to dataLayer
                     
                 });
 				
@@ -330,25 +327,25 @@
             
             var sliderControl = L.control({ position: 'bottomleft'} );
 
-// when we add this control object to the map
-            sliderControl.onAdd = function (map) {
 
-    // select an existing DOM element with an id of "ui-controls"
+            sliderControl.onAdd = function (map) {
+                
+                // select an existing DOM element with an id of "ui-controls"
                 var slider = L.DomUtil.get("ui-controls");
 
-        // when the user clicks on the slider element
+                // when the user clicks on the slider element
                 L.DomEvent.addListener(slider, 'mousedown', function (e) { 
 
-            // prevent the click event from bubbling up to the map
+                    // prevent the click event from bubbling up to the map
                     L.DomEvent.stopPropagation(e); 
 
         });
 
-    // return the slider from the onAdd method
+            // return the slider from the onAdd method
             return slider;
         }
 
-// add the control object containing our slider element to the map
+            // add the control object containing our slider element to the map
             sliderControl.addTo(map);
         
             $(".year-slider")
@@ -383,7 +380,7 @@
             // create shorthand variable to access layer properties
             var props = layer.feature.properties;
 
-            // create html object that shows the properties of the counties when each one is moused over
+            // create html object that shows the properties of the states when each one is moused over
             var html = "<h3>"+layer.feature.properties['State_Name']+" </h3>"+
 
                     "2001: <b>"+ props[2001]+"%</b><br>"+
