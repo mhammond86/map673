@@ -213,6 +213,26 @@
                 // create a user interaction as they mouse over the map
                 layer.on('mouseover', function() {
                     updateInfo(this);
+                     $(".info").show();
+                    // sets event actions to green
+                    this.setStyle({
+                        color: 'green', // set the color of the mouseover event 
+                        weight: 2,  // set stroke weight
+                        opacity: 0.8  // set opacity
+                    })
+                    this.bringToFront();
+                });
+                            
+            
+                dataLayer.on('mouseout', function() {
+                    $(".info").hide(); 
+                    
+                    // sets event actions to grey
+                    this.setStyle({
+                        color: '#dddddd',  // set the color of the mouseout event
+                        weight: 1
+                    })
+                    
                 });
             });
             
@@ -265,7 +285,7 @@
             attribute = $(this).val();
                 
             // draws the map
-            drawMap();
+//            drawMap();
 
             });
         };
@@ -306,39 +326,10 @@
                 
                 // push that value into the array
                 values.push(value);   
+
             
-            // creates a mouseover function for the user
-            layer.on('mouseover', function() {
-                updateInfo(this);
-                
-                // sets event actions to green
-                this.setStyle({
-                    color: 'green', // set the color of the mouseover event 
-                    weight: 2,  // set stroke weight
-                    opacity: 0.8  // set opacity
-                })
-            });
-            // creates a mouseout function for the user
-            layer.on('mouseout', function (){
-                
-                // sets event actions to grey
-                this.setStyle({
-                    color: 'grey',  // set the color of the mouseout event
-                    weight: 1
-                })
             })
             
-        })
-            
-            
-            
-            dataLayer.on('mouseover', function() {
-                $(".info").show();
-            });
-            
-            dataLayer.on('mouseout', function() {
-                $(".info").hide();    
-            });
            
             // use simple statistics to create 5 class ranges
             var clusters = ss.ckmeans(values, 5);
