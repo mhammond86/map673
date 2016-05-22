@@ -114,7 +114,9 @@
             background: rgba(255,255,255,0.8);
             box-shadow: 0 0 15px rgba(0,0,0,0.2);
             border-radius: 5px;
-            text-align: right;   
+            text-align: right;
+            width: 180px;
+            display: none;
         }
         
         label {
@@ -129,7 +131,7 @@
     
     <div id="ui-controls">
         <label><span class="min">2001</span><span class="max">2013</span>
-                <input type="range" min="2001", max="2013", value="2001", step="1", class="year-slider"></input>
+                <input type="range" min="2001", max="2013", value="2001", step="1", class="year-slider">
         </label>
     </div>
     <div id='map'></div>
@@ -235,9 +237,16 @@
                 
                 layer.on('mouseover', function() {
                     updateInfo(this);
+                    $('.info').show();
                     
                     layer.setStyle({color: '#FFFF00'}).bringToFront(); 
                 });
+                
+                    layer.on('mouseout', function() {
+                        $('.info').hide();
+                    
+                        layer.setStyle({color: 'white'}).bringToFront(); 
+                    });
                     
                 });
 				
@@ -309,11 +318,13 @@
             
             var legend = $('.legend').html("<h3>" + "% Unemployment" + attribute + "</h3><ul>");
             
+            var legendUL = $('.legend ul');
+            
             for (var i = 0; i < breaks.length - 1; i++) {
                 
                 var color = getColor(breaks[i + 1], breaks);
                 
-                legend.append('<li><span style="background:' + color + '"></span> ' +
+                legendUL.append('<li><span style="background:' + color + '"></span> ' +
                     
                     (breaks[i]).toLocaleString() + '&mdash; ' +
                     (breaks[i + 1]).toLocaleString() + '</li>');
