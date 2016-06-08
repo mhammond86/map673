@@ -7,6 +7,7 @@
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
 
     <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.2.min.js"></script>
 
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
     <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
@@ -49,22 +50,22 @@
 
 <body>
     <header>
-        <h1>Clean Energy</h1>
-        <h2>Cleaner For the Most Part.</h2>
+        <h1>Union Surficial Geology</h1>
+        <h2>Surficial Geology of the Union, KY Quadrangle.</h2>
     </header>
 
     <div id='map'></div>
 
     <footer>
         <p>Map authored by Max Hammond III</p>
-        <p>Clean energy power plants in the United States.</p>
+        <p>Surficial Geology of the Union, KY Quadrangle.</p>
     </footer>
 
-    <script src="union.geojson"></script>
+    <script src="unionprojected1.geojson"></script>
     <script>
 
        var map = L.map('map', {
-          center: [39,-84.5],
+          center: [38.945,-84.68],
           zoom: 10,
       });
       
@@ -75,80 +76,28 @@
       });  
       
       tiles.addTo(map);
-      var commonStyles = {
-        weight: 1,
-        stroke: 1,
-        fillOpacity: .8
-}  
-      
-      var layerInfo = {
-    hydroLayer: {source:"Hydro", color:'#1f78b4'}, 
-    windLayer: {source:"Wind", color:'#a6cee3'},
-    naturalGasLayer: {source:"Natural Gas", color:'#133727'}      
-};
+        
+        $.getJSON("unionprojected1.geojson", function(data){
+        
+       L.geoJson( data, {
+//    style: function(feature){
+//      var fillColor,
+//          Label = feature.properties.Label;
+//      if ( Label = Qr ) fillColor = "#006837";
+//      else if ( Label = Qal ) fillColor = "#31a354";
+//      else if ( Label = Qaf ) fillColor = "#78c679";
+//      else if ( Label = Qc ) fillColor = "#c2e699";
+//      else if ( Label = af1 ) fillColor = "#ffffcc";
+//      else if ( Label = Qalo ) fillColor = "#fffdbc";
+//      else fillColor = "#f7f7f7";  // no data
+//      return { color: "#999", weight: 1, fillColor: fillColor, fillOpacity: .6 };
+//    },
+//           
+        }).addTo(map);
+            
+        });
 
-var geoJsonLayers = {};
-
-for(var layer in layerInfo) {     
-    geoJsonLayers[layer] = L.geoJson(plants, {
-        pointToLayer: function(feature,latlng) {
-            return L.circleMarker(latlng, commonStyles);
-        },
-        filter: function(feature) {
-            if(feature.properties.fuel_source[layerInfo[layer].source]) {
-                return feature;
-            }
-        },
-        style: function(feature) {
-            return {
-                color: layerInfo[layer].color,
-                fillColor: layerInfo[layer].color,
-                radius: getRadius(feature.properties.fuel_source[layerInfo[layer].source])
-            } 
-        } 
-    }).addTo(map);        
-    }
-        map.on('click', function (e) {
-          for (var layer in layerInfo) {
-               geoJsonLayers[layer].eachLayer(function (layer) {
-                    var distance = e.latlng.distanceTo(layer.getLatLng()) / 1000;
-
-                    if (distance > 500) {
-                        layer.setStyle({
-                             stroke: false
-                            , fill: false
-                       });
-                     } else {
-                         layer.setStyle({
-                             stroke: true
-                             , fill: true
-                         });
-                         
-                         for (var source in layer.feature.properties.fuel_source) {
-                                var fuelsource = source;
-                                }
-                         
-                         layer.bindPopup("<b>"+layer.feature.properties.plant_name+"</b><br>"+ fuelsource + 
-                                         "<br> I am <b>"+distance.toLocaleString()+ 
-                                           "km</b><br> from the click point.");
-                     }
-                 });
-            }
-            });
- 
-
-function getRadius(val) {
-    var radius = Math.sqrt(val/Math.PI);
-    return radius * .8;   
-}
-
-var sourcesLabels = {
-    "<b style='color:#1f78b4'>Hydro</b>": geoJsonLayers.hydroLayer,
-    "<b style='color:#a6cee3'>Wind</b>": geoJsonLayers.windLayer,
-    "<b style='color:#133727'>Natural Gas</b>": geoJsonLayers.naturalGasLayer
-}
-
-L.control.layers(null, sourcesLabels, { collapsed:false }).addTo(map);
+        
         
         
             
